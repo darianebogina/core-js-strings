@@ -154,10 +154,13 @@ function repeatString(str, times) {
  *   removeFirstOccurrences('To be or not to be', 'be') => 'To  or not to be'.
  *   removeFirstOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
- * return str.replace(value);
  */
-function removeFirstOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  const index = str.indexOf(value);
+  if (str.includes(value)) {
+    return str.slice(0, index) + str.slice(index + value.length);
+  }
+  return str;
 }
 
 /**
@@ -172,8 +175,12 @@ function removeFirstOccurrences(/* str, value */) {
  *   removeLastOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeLastOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeLastOccurrences(str, value) {
+  const index = str.lastIndexOf(value);
+  if (str.includes(value)) {
+    return str.slice(0, index) + str.slice(index + value.length);
+  }
+  return str;
 }
 
 /**
@@ -388,8 +395,22 @@ function reverseWords(str) {
  *   invertCase('JavaScript is Fun') => 'jAVAsCRIPT IS fUN'
  *   invertCase('12345') => '12345'
  */
-function invertCase(/* str */) {
-  throw new Error('Not implemented');
+function invertCase(str) {
+  const upPattern = /[A-Z]/g;
+  const lowPattern = /[a-z]/g;
+  const original = str.split('');
+  const result = [];
+
+  for (let i = 0; i < original.length; i += 1) {
+    let char = original[i];
+    if (char.match(upPattern) !== null) {
+      char = char.toLowerCase();
+    } else if (char.match(lowPattern) !== null) {
+      char = char.toUpperCase();
+    }
+    result.push(char);
+  }
+  return result.join('');
 }
 
 /**
@@ -442,7 +463,7 @@ function unbracketTag(str) {
  * Extracts e-mails from single string with e-mails list delimited by semicolons
  *
  * @param {string} str - The input string.
- * @return {array} - The list of e-mails extracted from the string.
+ * @return {original} - The list of e-mails extracted from the string.
  *
  * @example
  *   'angus.young@gmail.com;brian.johnson@hotmail.com;bon.scott@yahoo.com'
@@ -473,8 +494,19 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const encoding = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+  const original = str.split('');
+  const answer = [];
+  for (let i = 0; i < original.length; i += 1) {
+    let char = original[i];
+    if (char.match(/[a-zA-Z]/g) !== null) {
+      char = encoding.charAt(alphabet.indexOf(char));
+    }
+    answer.push(char);
+  }
+  return answer.join('');
 }
 
 /**
@@ -501,8 +533,35 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const signs = ['♣', '♦', '♥', '♠'];
+  const ranks = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+  let sign = 0;
+  let rank = 0;
+  if (value.length === 2) {
+    sign = value.charAt(1);
+    rank = value.charAt(0);
+  } else {
+    sign = value.charAt(2);
+    rank = '10';
+  }
+  sign = 13 * signs.indexOf(sign);
+  rank = ranks.indexOf(rank);
+  return sign + rank;
 }
 
 module.exports = {
